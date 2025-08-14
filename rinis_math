@@ -1,0 +1,47 @@
+import math
+
+def build_flower_pattern(size=7):
+    flower = []
+    for i in range(size):
+        row = []
+        for j in range(size):
+            if (
+                (i == 0 and j == size // 2) or
+                (i == size - 1 and j == size // 2) or
+                (j == 0 and i == size // 2) or
+                (j == size - 1 and i == size // 2) or
+                (i == j and i <= size // 2) or
+                (i + j == size - 1 and i <= size // 2)
+            ):
+                row.append("*")
+            else:
+                row.append(" ")
+        flower.append(row)
+    return flower
+
+canvas_size = 20
+canvas = [[" " for _ in range(canvas_size)] for _ in range(canvas_size)]
+center_x, center_y = canvas_size // 2, canvas_size // 2
+
+flower = build_flower_pattern()
+flower_size = len(flower)
+
+petal_radius = 7  
+for k in range(6):
+    angle = 2 * math.pi * k / 6
+    dx = int(petal_radius * math.cos(angle))
+    dy = int(petal_radius * math.sin(angle))
+
+    start_x = center_x + dx - flower_size // 2
+    start_y = center_y + dy - flower_size // 2
+
+    for i in range(flower_size):
+        for j in range(flower_size):
+            x = start_x + j
+            y = start_y + i
+            if 0 <= x < canvas_size and 0 <= y < canvas_size:
+                if flower[i][j] == "*":
+                    canvas[y][x] = "*"
+
+for row in canvas:
+    print("".join(row))
